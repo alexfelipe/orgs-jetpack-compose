@@ -6,7 +6,7 @@ Projeto de simulação de um e-commerce de produtos naturais
 
 O App lista e cadastra produtos com imagem, nome, descrição e valor:
 
-![image](https://user-images.githubusercontent.com/8989346/125341595-268f7700-e32a-11eb-8063-0d4876cb3a4d.png)
+![orgs-compose](https://user-images.githubusercontent.com/8989346/125343225-31e3a200-e32c-11eb-9848-ceef5ad13d57.gif)
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
