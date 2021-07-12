@@ -1,67 +1,42 @@
-## Readme template da Alura
+# Orgs
 
-Template para personalizar readme dos projetos da Alura. O objetivo deste template é auxiliar as pessoas que pretendem criar readmes mais informativos e descritivos. Considere esse modelo como base e, se preferir, ajuste os detalhes conforme sua necessidade.
-
-## Exemplos de readmes
-
-<details>
-  <summary><b>Mobile</b></summary>
-    
-- [Android](https://github.com/alura-cursos/android-com-kotlin-personalizando-ui/blob/master/README.md)
-- [React Native](https://github.com/alura-cursos/react-native-comecando-do-zero/blob/master/README.md)
-    
-</details>
-
-Ao criar o seu readme, remova todas as informações acima e mantenha apenas a imagem de capa e o conteúdo restante a partir do títutlo **"Nome do projeto"**.
-
-## Imagem de capa
-
-Adicione a imagem de capa com o tema do seu projeto:
-
-![Thumbnail GitHub](https://user-images.githubusercontent.com/8989346/123303345-171fc980-d4f4-11eb-84ae-cb0e49bfb126.png)
-
-> Você pode pegar a imagem a partir [deste template](https://docs.google.com/presentation/d/1im_-_spDdNEEsfrmjeZet2ZzVKjG-sQSBWfPFJhZ4q0/edit#slide=id.gb6f422ab58_0_111).
-
-Após adicionar a imagem, também modifique as configurações do projeto para garantir que a imagem vai ser carregada como thumbnail:
-
-**Settings** > **Options** > **Social preview** > **Edit** > **Upload an image...**
-
-<details>
-  <summary><b>Demonstração da adição de thumbnail<b/></summary>
-    
-![adicionando-imagem-preview](https://user-images.githubusercontent.com/8989346/123303159-e0e24a00-d4f3-11eb-9900-92a8b15bc31b.gif)
-    
-</details>
-  
-# Nome do projeto
-
-Descreva o que é o projeto e o que ele faz
+Projeto de simulação de um e-commerce de produtos naturais
 
 ## 🔨 Funcionalidades do projeto
 
-Indique quais são as funcionalidades e comportamentos do App
+O App lista e cadastra produtos com imagem, nome, descrição e valor:
 
-Se possível, apresente um exemplo visual do projeto, seja gif, imagens ou vídeo, abaixo segue um exemplo:
-
-![](https://github.com/alura-cursos/android-com-kotlin-personalizando-ui/raw/master/img/amostra.gif)
+![image](https://user-images.githubusercontent.com/8989346/125341595-268f7700-e32a-11eb-8063-0d4876cb3a4d.png)
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-**Faça uma lista de tecnologias e técnicas utilizadas (a justificativa e descrição são opcionais)**:
-
-- `Funcionalidade 1`: descrição da funcionalidade 1
-- `Funcionalidade 2`: descrição da funcionalidade 2
-  - `Funcionalidade 2a`: descrição da funcionalidade 2a relacionada à funcionalidade 2
-- `Funcionalidade 3`: descrição da funcionalidade 3
+- `Kotlin`: linguagem padrão do projeto
+- `Jetpack Compose`: framework de criação de telas com o padrão de UI declarativa
+  - `Scaffold`: base para utilizar os componentes do material
+    - `TopAppBar`: barra do topo do App
+    - `FloatingActionButton`: botão para acessar formulário de produto
+  - `Card`: container de cada item do produto
+  - `Column`: ordenação dos composables em coluna
+  - `Text`: apresentação de texto do nome, descrição e valor
+  - `Image`: carregamento de imagens
+  - `OutlinedTextField`: campo de texto para inserir as informações do produto
+  - `Button`: botão para salvar produtos
+  - `LazyColumn`: carregamento dos itens do produto dinacamente
+  - `Coil`: biblioteca para carregar imagens a partir de URLs
+- `Navigation`: configuração de nevagação de telas
+- `DAO`: padrão para salvar e oferecer produtos em memória (as informações são perdidas ao reiniciar o App)
+- `Extração de componentes`: criação e separação de componentes em arquivos distintos para isolar e reutilizar
 
 ## 📁 Acesso ao projeto
 
-**Indique como é possível baixar ou acessar o código fonte do projeto, seja projeto inicial ou final**
+Você pode acessar o projeto a partir da branch [dev](https://github.com/alexfelipe/orgs-jetpack-compose/tree/dev). Se preferir, pode [baixá-la também como um zip](https://github.com/alexfelipe/orgs-jetpack-compose/archive/refs/heads/dev.zip).
 
-## 🛠️ Abrir e rodar o projeto
+ ## 🛠️ Abrir e rodar o projeto
 
-**Apresente as instruções necessárias para abrir e executar o projeto**
+Após baixar o projeto, você pode abrir com o Android Studio. Para isso, na tela de launcher clique em:
 
-## 📚 Mais informações do curso
+- **Open an Existing Project** (ou alguma opção similar)
+- Procure o local onde o projeto está e o selecione (Caso o projeto seja baixado via zip, é necessário extraí-lo antes de procurá-lo)
+- Por fim clique em OK
 
-**Faça um CTA para o curso do projeto**
+O Android Studio deve executar algumas tasks do Gradle para configurar o projeto, aguarde até finalizar. Ao finalizar as tasks, você pode executar o App 🏆
