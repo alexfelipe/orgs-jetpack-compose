@@ -6,7 +6,7 @@ Projeto de simulação de um e-commerce de produtos naturais
 
 O App lista e cadastra produtos com imagem, nome, descrição e valor:
 
-![orgs-compose](https://user-images.githubusercontent.com/8989346/125343225-31e3a200-e32c-11eb-9848-ceef5ad13d57.gif)
+![orgs-compose-with-dialog](https://user-images.githubusercontent.com/8989346/125638297-56bf1082-2898-40ad-bc8b-ee09f8c2d01e.gif)
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
@@ -17,12 +17,15 @@ O App lista e cadastra produtos com imagem, nome, descrição e valor:
     - `FloatingActionButton`: botão para acessar formulário de produto
   - `Card`: container de cada item do produto
   - `Column`: ordenação dos composables em coluna
+  - `Box`: container para alinhar composables sobre o outro
   - `Text`: apresentação de texto do nome, descrição e valor
   - `Image`: carregamento de imagens
   - `OutlinedTextField`: campo de texto para inserir as informações do produto
   - `Button`: botão para salvar produtos
   - `LazyColumn`: carregamento dos itens do produto dinacamente
   - `Coil`: biblioteca para carregar imagens a partir de URLs
+  - `Dialog`: caixa de diálogo para inserir imagens
+  - `TextButton`: botões para a caixa de diálogo
 - `Navigation`: configuração de nevagação de telas
 - `DAO`: padrão para salvar e oferecer produtos em memória (as informações são perdidas ao reiniciar o App)
 - `Extração de componentes`: criação e separação de componentes em arquivos distintos para isolar e reutilizar
