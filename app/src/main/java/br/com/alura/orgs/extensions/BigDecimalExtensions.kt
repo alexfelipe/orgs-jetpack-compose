@@ -4,6 +4,6 @@ import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.*
 
-fun BigDecimal.formataParaMoeda(
+fun BigDecimal.formatToCurrency(
     locale: Locale = Locale("pt", "br")
 ): String = NumberFormat.getCurrencyInstance(locale).format(this)

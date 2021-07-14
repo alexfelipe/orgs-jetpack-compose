@@ -13,9 +13,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.orgs.dao.ProdutoDao
-import br.com.alura.orgs.ui.composable.produto.formulario.FormularioProduto
-import br.com.alura.orgs.ui.composable.produto.lista.ListaProdutos
+import br.com.alura.orgs.dao.ProductDao
+import br.com.alura.orgs.ui.composable.produto.formulario.ProductForm
+import br.com.alura.orgs.ui.composable.produto.lista.ProductsList
 import br.com.alura.orgs.ui.theme.OrgsTheme
 
 
@@ -25,12 +25,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "OrgsApp") {
+            NavHost(
+                navController = navController,
+                startDestination = "OrgsApp"
+            ) {
                 composable("OrgsApp") {
                     OrgsApp(navController = navController)
                 }
-                composable("formularioProduto") {
-                    FormularioProduto(navController = navController)
+                composable("productForm") {
+                    ProductForm(navController = navController)
                 }
             }
         }
@@ -39,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun OrgsApp(
-    dao: ProdutoDao = ProdutoDao(),
+    dao: ProductDao = ProductDao(),
     navController: NavHostController = rememberNavController()
 ) {
 
@@ -50,18 +53,18 @@ private fun OrgsApp(
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = {
-                    navController.navigate("formularioProduto")
+                    navController.navigate("productForm")
                 }) {
                     Icon(
-                        Icons.Filled.Add, "Novo produto"
+                        Icons.Filled.Add, "new product"
                     )
                 }
             }
         ) {
-            val produtos = remember {
-                dao.todos()
+            val products = remember {
+                dao.all()
             }
-            ListaProdutos(produtos)
+            ProductsList(products)
         }
     }
 }

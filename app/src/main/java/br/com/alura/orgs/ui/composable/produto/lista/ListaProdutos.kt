@@ -15,44 +15,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alura.orgs.R
-import br.com.alura.orgs.extensions.formataParaMoeda
-import br.com.alura.orgs.model.Produto
+import br.com.alura.orgs.extensions.formatToCurrency
+import br.com.alura.orgs.model.Product
 import br.com.alura.orgs.ui.theme.Green800
 import com.google.accompanist.coil.rememberCoilPainter
 import java.math.BigDecimal
 
 @Composable
-fun ListaProdutos(produtos: List<Produto>) {
+fun ProductsList(products: List<Product>) {
     LazyColumn {
-        items(produtos) { produto ->
-            ProdutoItem(
-                produto = produto,
+        items(products) { product ->
+            ProductItem(
+                product = product,
             )
         }
     }
 }
 
 @Composable
-fun ProdutoItem(produto: Produto) {
-    val imagem = produto.image?.let {
-        rememberCoilPainter(it, requestBuilder = {
+fun ProductItem(product: Product) {
+    val image = rememberCoilPainter(
+        product.image ?: R.drawable.default_image,
+        requestBuilder = {
             placeholder(R.drawable.placeholder)
-        })
-    } ?: painterResource(id = R.drawable.imagem_padrao)
-    ProdutoItem(produto = produto, imagem)
+            error(R.drawable.error)
+        },
+        previewPlaceholder = R.drawable.default_image
+    )
+    ProductItem(product = product, image)
 }
 
 @Composable
-private fun ProdutoItem(
-    produto: Produto,
-    imagem: Painter = painterResource(id = R.drawable.imagem_padrao)
+private fun ProductItem(
+    product: Product,
+    image: Painter = rememberCoilPainter(
+        R.drawable.default_image,
+        previewPlaceholder = R.drawable.default_image,
+        requestBuilder = {
+            placeholder(R.drawable.placeholder)
+            error(R.drawable.error)
+        }
+    )
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -61,8 +70,8 @@ private fun ProdutoItem(
         Column(modifier = Modifier.padding(8.dp)) {
 
             Image(
-                painter = imagem,
-                contentDescription = "Imagem do produto",
+                painter = image,
+                contentDescription = "product image",
                 modifier = Modifier
                     .height(100.dp)
                     .fillMaxWidth()
@@ -70,7 +79,7 @@ private fun ProdutoItem(
                 contentScale = ContentScale.Crop
             )
             Text(
-                text = produto.nome,
+                text = product.name,
                 maxLines = 2,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -78,14 +87,14 @@ private fun ProdutoItem(
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = produto.descricao,
+                text = product.description,
                 fontSize = 14.sp,
                 maxLines = 1,
                 modifier = Modifier.padding(top = 8.dp),
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = produto.valor.formataParaMoeda(),
+                text = product.value.formatToCurrency(),
                 modifier = Modifier.padding(top = 8.dp),
                 fontWeight = FontWeight.Bold,
                 color = Green800,
@@ -97,30 +106,30 @@ private fun ProdutoItem(
 
 @Preview
 @Composable
-fun ProdutoItemPreview() {
-    ProdutoItem(
-        produto = Produto(
-            nome = "teste nome",
-            descricao = "teste descrição",
-            valor = BigDecimal("19.99")
+fun ProductItemPreview() {
+    ProductItem(
+        product = Product(
+            name = "test name",
+            description = "test description",
+            value = BigDecimal("19.99")
         )
     )
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun ListaProdutoPreview() {
-    ListaProdutos(
+fun ProductsListPreview() {
+    ProductsList(
         listOf(
-            Produto(
-                nome = "teste nome 1",
-                descricao = "teste descrição 1",
-                valor = BigDecimal("9.99")
+            Product(
+                name = "test name 1",
+                description = "test description 1",
+                value = BigDecimal("9.99")
             ),
-            Produto(
-                nome = "teste nome 2",
-                descricao = "teste descrição 2",
-                valor = BigDecimal("19.99")
+            Product(
+                name = "test name 2",
+                description = "test description 2",
+                value = BigDecimal("19.99")
             ),
         )
     )
