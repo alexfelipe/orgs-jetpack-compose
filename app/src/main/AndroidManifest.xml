@@ -16,7 +16,9 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Orgs.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:resizeableActivity="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

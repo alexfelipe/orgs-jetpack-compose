@@ -1,6 +1,5 @@
 package br.com.alura.orgs.ui.composable.produto.formulario
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +20,7 @@ import br.com.alura.orgs.R
 import br.com.alura.orgs.dao.ProductDao
 import br.com.alura.orgs.model.Product
 import com.google.accompanist.coil.rememberCoilPainter
+import java.lang.NumberFormatException
 import java.math.BigDecimal
 
 @Composable
@@ -32,8 +32,20 @@ fun ProductForm(
         mutableStateOf(false)
     }
 
-    var image: String? by remember {
+    var imageField: String? by remember {
         mutableStateOf(null)
+    }
+
+    if (showDialog) {
+        ImageFormDialog(
+            imageField,
+            onDismiss = {
+                showDialog = false
+            }
+        ) { loadedImage ->
+            showDialog = false
+            imageField = loadedImage
+        }
     }
 
     Column(
@@ -43,22 +55,14 @@ fun ProductForm(
             .verticalScroll(rememberScrollState())
     ) {
 
-        if (showDialog) {
-            ImageFormDialog(
-                image,
-                onDismiss = {
-                    showDialog = false
-                }
-            ) { loadedImage ->
-                showDialog = false
-                image = loadedImage
-            }
-        }
-
         Image(
             painter = rememberCoilPainter(
-                image ?: R.drawable.default_image,
-                previewPlaceholder = R.drawable.default_image
+                imageField ?: R.drawable.default_image,
+                previewPlaceholder = R.drawable.default_image,
+                requestBuilder = {
+                    placeholder(R.drawable.placeholder)
+                    error(R.drawable.error)
+                }
             ),
             contentDescription = "product image",
             Modifier
@@ -72,13 +76,13 @@ fun ProductForm(
             contentScale = ContentScale.Crop
         )
 
-        var name by remember {
+        var nameField by remember {
             mutableStateOf("")
         }
         OutlinedTextField(
-            value = name,
+            value = nameField,
             onValueChange = {
-                name = it
+                nameField = it
             },
             label = {
                 Text(text = "Name")
@@ -89,13 +93,13 @@ fun ProductForm(
                     horizontal = 16.dp
                 )
         )
-        var description by remember {
+        var descriptionField by remember {
             mutableStateOf("")
         }
         OutlinedTextField(
-            value = description,
+            value = descriptionField,
             onValueChange = {
-                description = it
+                descriptionField = it
             },
             label = {
                 Text(text = "Description")
@@ -108,13 +112,13 @@ fun ProductForm(
                     end = 16.dp
                 )
         )
-        var valor by remember {
+        var valueField by remember {
             mutableStateOf("")
         }
         OutlinedTextField(
-            value = valor,
+            value = valueField,
             onValueChange = {
-                valor = it
+                valueField = it
             },
             label = {
                 Text(text = "Value")
@@ -125,16 +129,22 @@ fun ProductForm(
                     horizontal = 16.dp,
                     vertical = 16.dp
                 ),
-            keyboardOptions = KeyboardOptions.Default
-                .copy(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Button(
             onClick = {
+
+                val value = try {
+                    BigDecimal(valueField)
+                } catch (e: Exception) {
+                    BigDecimal.ZERO
+                }
+
                 val newProduct = Product(
-                    name = name,
-                    description = description,
-                    value = BigDecimal(valor),
-                    image = image
+                    name = nameField,
+                    description = descriptionField,
+                    value = value,
+                    image = imageField
                 )
                 ProductDao().save(newProduct)
                 navController.popBackStack()
@@ -159,17 +169,21 @@ private fun ImageFormDialog(
     onDismiss: () -> Unit,
     onConfirm: (url: String?) -> Unit
 ) {
-    Dialog(
-        onDismissRequest = onDismiss,
+    Box(
+        Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(32.dp)
     ) {
-        ImageForm(
-            defaultImage = defaultImage,
-            onCancel = onDismiss,
-            onConfirm = { loadedImage ->
-                onDismiss()
-                onConfirm(loadedImage)
-            }
-        )
+        Dialog(onDismissRequest = onDismiss) {
+            ImageForm(
+                defaultImage = defaultImage,
+                onCancel = onDismiss,
+                onConfirm = { loadedImage ->
+                    onDismiss()
+                    onConfirm(loadedImage)
+                }
+            )
+        }
     }
 }
 
@@ -189,14 +203,10 @@ private fun ImageForm(
     }
 
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-            .wrapContentHeight(),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.padding(32.dp)
     ) {
-
-        Column(Modifier.wrapContentHeight()) {
+        Column {
             Box(Modifier.wrapContentHeight()) {
                 Image(
                     painter = rememberCoilPainter(
