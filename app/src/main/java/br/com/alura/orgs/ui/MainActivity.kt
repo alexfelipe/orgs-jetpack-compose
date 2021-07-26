@@ -8,25 +8,25 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.orgs.dao.ProductDao
 import br.com.alura.orgs.ui.composable.produto.formulario.ProductForm
 import br.com.alura.orgs.ui.composable.produto.lista.ProductsList
 import br.com.alura.orgs.ui.theme.OrgsTheme
-import br.com.alura.orgs.ui.viewmodel.ProductsViewModel
+import br.com.alura.orgs.ui.viewmodel.ProductFormViewModel
+import br.com.alura.orgs.ui.viewmodel.ProductsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: ProductsViewModel by viewModels()
+    private val productsListVM: ProductsListViewModel by viewModels()
+    private val productFormVM: ProductFormViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,24 +38,25 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable("OrgsApp") {
                     OrgsApp(
-                        viewModel,
+                        viewModel = productsListVM,
                         navController = navController
                     )
                 }
                 composable("productForm") {
-                    ProductForm(navController = navController)
+                    ProductForm(
+                        viewModel = productFormVM,
+                        navController = navController
+                    )
                 }
             }
         }
     }
 }
 
-class Teste @Inject constructor()
-
 @Composable
 private fun OrgsApp(
-    viewModel: ProductsViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    viewModel: ProductsListViewModel = viewModel(),
+    navController: NavHostController = rememberNavController(),
 ) {
 
     OrgsTheme {
@@ -73,10 +74,8 @@ private fun OrgsApp(
                 }
             }
         ) {
-            val products = remember {
-                viewModel.findAll()
-            }
-            ProductsList(products)
+            val products = viewModel.findAll().collectAsState(initial = emptyList())
+            ProductsList(products = products.value)
         }
     }
 }
