@@ -27,7 +27,11 @@ O App lista e cadastra produtos com imagem, nome, descrição e valor:
   - `Dialog`: caixa de diálogo para inserir imagens
   - `TextButton`: botões para a caixa de diálogo
 - `Navigation`: configuração de nevagação de telas
-- `DAO`: padrão para salvar e oferecer produtos em memória (as informações são perdidas ao reiniciar o App)
+- `Hilt`: lib para [injeção de dependência](https://www.alura.com.br/artigos/injecao-de-dependencia-do-android-com-o-hilt).
+- `ViewModel`: componente para lidar com os dados de cada tela (Composable)
+- `Room`: lib para facilitar a comunicação com o banco de dados utilizando o SQLite
+  - `DAO`: padrão para salvar e oferecer produtos.
+  - `Entity`: definição de campos que devem ser salvos no banco de dados
 - `Extração de componentes`: criação e separação de componentes em arquivos distintos para isolar e reutilizar
 
 ## 📁 Acesso ao projeto
