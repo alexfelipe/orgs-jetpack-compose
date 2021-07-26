@@ -1,14 +1,16 @@
-package br.com.alura.orgs
+package br.com.alura.orgs.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,9 +19,14 @@ import br.com.alura.orgs.dao.ProductDao
 import br.com.alura.orgs.ui.composable.produto.formulario.ProductForm
 import br.com.alura.orgs.ui.composable.produto.lista.ProductsList
 import br.com.alura.orgs.ui.theme.OrgsTheme
+import br.com.alura.orgs.ui.viewmodel.ProductsViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: ProductsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +37,10 @@ class MainActivity : ComponentActivity() {
                 startDestination = "OrgsApp"
             ) {
                 composable("OrgsApp") {
-                    OrgsApp(navController = navController)
+                    OrgsApp(
+                        viewModel,
+                        navController = navController
+                    )
                 }
                 composable("productForm") {
                     ProductForm(navController = navController)
@@ -40,9 +50,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+class Teste @Inject constructor()
+
 @Composable
 private fun OrgsApp(
-    dao: ProductDao = ProductDao(),
+    viewModel: ProductsViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
 
@@ -62,7 +74,7 @@ private fun OrgsApp(
             }
         ) {
             val products = remember {
-                dao.all()
+                viewModel.findAll()
             }
             ProductsList(products)
         }
