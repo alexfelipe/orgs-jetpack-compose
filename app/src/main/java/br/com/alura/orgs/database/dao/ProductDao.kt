@@ -16,4 +16,7 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(product: Product)
 
+    @Query("SELECT * FROM Product WHERE id = :id")
+    fun findById(id: String): Flow<Product?>
+
 }

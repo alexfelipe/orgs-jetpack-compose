@@ -1,6 +1,7 @@
 package br.com.alura.orgs.ui.composable.produto.lista
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import br.com.alura.orgs.R
 import br.com.alura.orgs.extensions.formatToCurrency
 import br.com.alura.orgs.model.Product
@@ -28,18 +31,26 @@ import com.google.accompanist.coil.rememberCoilPainter
 import java.math.BigDecimal
 
 @Composable
-fun ProductsList(products: List<Product>) {
+fun ProductsList(
+    products: List<Product>,
+    navController: NavHostController = rememberNavController(),
+) {
     LazyColumn {
         items(products) { product ->
             ProductItem(
                 product = product,
-            )
+            ) {
+                navController.navigate("productDetails/${product.id}")
+            }
         }
     }
 }
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(
+    product: Product,
+    onClick: () -> Unit,
+) {
     val image = rememberCoilPainter(
         product.image ?: R.drawable.default_image,
         requestBuilder = {
@@ -48,7 +59,9 @@ fun ProductItem(product: Product) {
         },
         previewPlaceholder = R.drawable.default_image
     )
-    ProductItem(product = product, image)
+    ProductItem(product = product, image) {
+        onClick()
+    }
 }
 
 @Composable
@@ -61,11 +74,16 @@ private fun ProductItem(
             placeholder(R.drawable.placeholder)
             error(R.drawable.error)
         }
-    )
+    ),
+    onClick: () -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .padding(16.dp)
+            .clickable {
+                onClick()
+            },
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
 

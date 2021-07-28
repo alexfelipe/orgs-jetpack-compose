@@ -15,9 +15,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.alura.orgs.ui.composable.produto.detail.ProductDetails
 import br.com.alura.orgs.ui.composable.produto.formulario.ProductForm
 import br.com.alura.orgs.ui.composable.produto.lista.ProductsList
 import br.com.alura.orgs.ui.theme.OrgsTheme
+import br.com.alura.orgs.ui.viewmodel.ProductDetailsViewModel
 import br.com.alura.orgs.ui.viewmodel.ProductFormViewModel
 import br.com.alura.orgs.ui.viewmodel.ProductsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     private val productsListVM: ProductsListViewModel by viewModels()
     private val productFormVM: ProductFormViewModel by viewModels()
+    private val productDetailsVM: ProductDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,14 @@ class MainActivity : ComponentActivity() {
                         viewModel = productFormVM,
                         navController = navController
                     )
+                }
+                composable("productDetails/{id}") {
+                    it.arguments?.getString("id")?.let { id ->
+                        ProductDetails(
+                            id = id,
+                            viewModel = productDetailsVM
+                        )
+                    }
                 }
             }
         }
@@ -75,7 +86,7 @@ private fun OrgsApp(
             }
         ) {
             val products = viewModel.findAll().collectAsState(initial = emptyList())
-            ProductsList(products = products.value)
+            ProductsList(products = products.value, navController)
         }
     }
 }
