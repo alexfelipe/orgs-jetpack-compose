@@ -40,7 +40,7 @@ Você pode acessar o projeto a partir da branch [dev](https://github.com/alexfel
 
  ## 🛠️ Abrir e rodar o projeto
 
-Após baixar o projeto, você pode abrir com o Android Studio. o Jetpack Compose etá em beta ainda, portanto, você deve usar a versão [Arctic Fox | 2020.3.1 Beta 5 do AS](https://developer.android.com/studio/preview) para abrir o projeto. Após instalar esta versão e abrir a tela de launcher clique em:
+Após baixar o projeto, você pode abrir com o Android Studio. o Jetpack Compose entrou em release a partir da versão [Arctic Fox do AS (2020.3.1)](https://developer.android.com/studio) para abrir o projeto. Após instalar esta versão e abrir a tela de launcher clique em:
 
 - **Open** (ou uma opção similar para abrir projetos) (ou alguma opção similar)
 - Procure o local onde o projeto está e o selecione (Caso o projeto seja baixado via zip, é necessário extraí-lo antes de procurá-lo)
