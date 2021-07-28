@@ -30,7 +30,7 @@ import java.math.BigDecimal
 @Composable
 fun ProductForm(
     viewModel: ProductFormViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
 
     val composableScope = rememberCoroutineScope()
@@ -178,11 +178,10 @@ fun ProductForm(
 private fun ImageFormDialog(
     defaultImage: String?,
     onDismiss: () -> Unit,
-    onConfirm: (url: String?) -> Unit
+    onConfirm: (url: String?) -> Unit,
 ) {
     Box(
         Modifier
-            .verticalScroll(rememberScrollState())
             .padding(32.dp)
     ) {
         Dialog(onDismissRequest = onDismiss) {
@@ -202,7 +201,7 @@ private fun ImageFormDialog(
 private fun ImageForm(
     defaultImage: String? = null,
     onCancel: () -> Unit = {},
-    onConfirm: (image: String?) -> Unit = {}
+    onConfirm: (image: String?) -> Unit = {},
 ) {
 
     var imageUrl by remember {
@@ -215,7 +214,10 @@ private fun ImageForm(
 
     Surface(
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(32.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Column {
             Box(Modifier.wrapContentHeight()) {
