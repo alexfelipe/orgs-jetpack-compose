@@ -4,9 +4,9 @@ Projeto de simulação de um e-commerce de produtos naturais
 
 ## 🔨 Funcionalidades do projeto
 
-O App lista e cadastra produtos com imagem, nome, descrição e valor:
+O App lista e cadastra produtos com imagem, nome, descrição e valor. Também, apresenta uma tela de detalhes do produto ao clicar em um dos produtos da lista:
 
-![orgs-compose-with-dialog](https://user-images.githubusercontent.com/8989346/125638297-56bf1082-2898-40ad-bc8b-ee09f8c2d01e.gif)
+![app-orgs-compose-new-version](https://user-images.githubusercontent.com/8989346/127361598-f259f620-8d6f-44f7-85f5-c619d63a47dc.gif)
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
