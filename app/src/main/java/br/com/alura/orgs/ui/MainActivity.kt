@@ -10,19 +10,22 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.orgs.ui.composable.produto.detail.ProductDetails
-import br.com.alura.orgs.ui.composable.produto.formulario.ProductForm
+import br.com.alura.orgs.model.Product
+import br.com.alura.orgs.ui.composable.produto.detail.ProductDetailsScreen
+import br.com.alura.orgs.ui.composable.produto.formulario.ProductFormScreen
 import br.com.alura.orgs.ui.composable.produto.lista.ProductsList
+import br.com.alura.orgs.ui.preview.data.models.products
 import br.com.alura.orgs.ui.theme.OrgsTheme
 import br.com.alura.orgs.ui.viewmodel.ProductDetailsViewModel
 import br.com.alura.orgs.ui.viewmodel.ProductFormViewModel
 import br.com.alura.orgs.ui.viewmodel.ProductsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -39,37 +42,57 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = "OrgsApp"
             ) {
+
                 composable("OrgsApp") {
-                    OrgsApp(
-                        viewModel = productsListVM,
-                        navController = navController
-                    )
+                    productsListVM.findAll()
+                        .collectAsState(initial = null)
+                        .value?.let { products ->
+                            OrgsAppScreen(
+                                onFabClick = {
+                                    navController.navigate("productForm")
+                                },
+                                products = products,
+                                onItemClick = {
+                                    navController
+                                        .navigate("productDetails/${it.id}")
+                                }
+                            )
+                        }
                 }
                 composable("productForm") {
-                    ProductForm(
-                        viewModel = productFormVM,
-                        navController = navController
+                    productFormVM //work around to resolve the save feature
+                    ProductFormScreen(
+                        onClickSave = { product ->
+                            navController.popBackStack()
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                productFormVM.save(product = product)
+                            }
+                        }
                     )
                 }
                 composable("productDetails/{id}") {
                     it.arguments?.getString("id")?.let { id ->
-                        ProductDetails(
-                            id = id,
-                            viewModel = productDetailsVM
-                        )
+                        productDetailsVM.findById(id)
+                            .collectAsState(initial = null)
+                            .value?.let { product ->
+                                ProductDetailsScreen(
+                                    product
+                                )
+                            }
                     }
                 }
             }
         }
     }
+
 }
 
 @Composable
-private fun OrgsApp(
-    viewModel: ProductsListViewModel = viewModel(),
-    navController: NavHostController = rememberNavController(),
+private fun OrgsAppScreen(
+    onFabClick: () -> Unit = {},
+    products: List<Product>,
+    onItemClick: (product: Product) -> Unit = {}
 ) {
-
     OrgsTheme {
         Scaffold(
             topBar = {
@@ -77,7 +100,7 @@ private fun OrgsApp(
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = {
-                    navController.navigate("productForm")
+                    onFabClick()
                 }) {
                     Icon(
                         Icons.Filled.Add, "new product"
@@ -85,15 +108,20 @@ private fun OrgsApp(
                 }
             }
         ) {
-            val products = viewModel.findAll().collectAsState(initial = emptyList())
-            ProductsList(products = products.value, navController)
+            ProductsList(
+                products = products,
+                onItemClick = {
+                    onItemClick(it)
+                }
+            )
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
-    OrgsApp()
+    OrgsAppScreen(
+        products = products
+    )
 }

@@ -17,24 +17,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.orgs.R
-import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.alura.orgs.model.Product
-import br.com.alura.orgs.ui.viewmodel.ProductFormViewModel
 import com.google.accompanist.coil.rememberCoilPainter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 @Composable
-fun ProductForm(
-    viewModel: ProductFormViewModel = viewModel(),
-    navController: NavHostController = rememberNavController(),
+fun ProductFormScreen(
+    onClickSave: (newProduct: Product) -> Unit = {}
 ) {
-
-    val composableScope = rememberCoroutineScope()
-
     var showDialog by remember {
         mutableStateOf(false)
     }
@@ -153,12 +145,7 @@ fun ProductForm(
                     value = value,
                     image = imageField
                 )
-
-                composableScope.launch(Dispatchers.IO) {
-                    viewModel.save(product = newProduct)
-                }
-
-                navController.popBackStack()
+                onClickSave (newProduct)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -294,7 +281,7 @@ private fun ImageForm(
 @Preview(showBackground = true)
 @Composable
 private fun ProductFormPreview() {
-    ProductForm()
+    ProductFormScreen()
 }
 
 @Preview

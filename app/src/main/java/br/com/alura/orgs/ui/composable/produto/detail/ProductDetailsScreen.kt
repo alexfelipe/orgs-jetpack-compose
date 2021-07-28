@@ -7,40 +7,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.alura.orgs.R
 import br.com.alura.orgs.extensions.formatToCurrency
 import br.com.alura.orgs.model.Product
 import br.com.alura.orgs.ui.theme.Green800
-import br.com.alura.orgs.ui.viewmodel.ProductDetailsViewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import java.math.BigDecimal
 
 @Composable
-fun ProductDetails(
-    id: String,
-    viewModel: ProductDetailsViewModel = viewModel(),
-) {
-    viewModel
-        .findById(id)
-        .collectAsState(initial = null).value?.let { product ->
-            ProductDetails(product = product)
-        }
-}
-
-@Composable
-private fun ProductDetails(product: Product) {
+fun ProductDetailsScreen(product: Product) {
     Column(
         Modifier
             .fillMaxHeight()
@@ -113,7 +97,7 @@ private fun ProductDetails(product: Product) {
 @Preview(showBackground = true)
 @Composable
 fun ProductDetailsPreview() {
-    ProductDetails(
+    ProductDetailsScreen(
         Product(
             name = LoremIpsum(10).values.joinToString(),
             description = LoremIpsum(50).values.joinToString(),

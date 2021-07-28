@@ -33,14 +33,14 @@ import java.math.BigDecimal
 @Composable
 fun ProductsList(
     products: List<Product>,
-    navController: NavHostController = rememberNavController(),
+    onItemClick: (product: Product) -> Unit = {}
 ) {
     LazyColumn {
         items(products) { product ->
             ProductItem(
                 product = product,
             ) {
-                navController.navigate("productDetails/${product.id}")
+                onItemClick(product)
             }
         }
     }
