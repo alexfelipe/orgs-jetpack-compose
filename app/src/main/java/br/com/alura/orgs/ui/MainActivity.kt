@@ -37,48 +37,51 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
-            NavHost(
-                navController = navController,
-                startDestination = "OrgsApp"
-            ) {
-
-                composable("OrgsApp") {
-                    productsListVM.findAll()
-                        .collectAsState(initial = null)
-                        .value?.let { products ->
-                            OrgsAppScreen(
-                                onFabClick = {
-                                    navController.navigate("productForm")
-                                },
-                                products = products,
-                                onItemClick = {
-                                    navController
-                                        .navigate("productDetails/${it.id}")
+            OrgsTheme {
+                Surface {
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "OrgsApp"
+                    ) {
+                        composable("OrgsApp") {
+                            productsListVM.findAll()
+                                .collectAsState(initial = null)
+                                .value?.let { products ->
+                                    OrgsAppScreen(
+                                        onFabClick = {
+                                            navController.navigate("productForm")
+                                        },
+                                        products = products,
+                                        onItemClick = {
+                                            navController
+                                                .navigate("productDetails/${it.id}")
+                                        }
+                                    )
+                                }
+                        }
+                        composable("productForm") {
+                            productFormVM //work around to resolve the save feature
+                            ProductFormScreen(
+                                onClickSave = { product ->
+                                    navController.popBackStack()
+                                    lifecycleScope.launch(Dispatchers.IO) {
+                                        productFormVM.save(product = product)
+                                    }
                                 }
                             )
                         }
-                }
-                composable("productForm") {
-                    productFormVM //work around to resolve the save feature
-                    ProductFormScreen(
-                        onClickSave = { product ->
-                            navController.popBackStack()
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                productFormVM.save(product = product)
+                        composable("productDetails/{id}") {
+                            it.arguments?.getString("id")?.let { id ->
+                                productDetailsVM.findById(id)
+                                    .collectAsState(initial = null)
+                                    .value?.let { product ->
+                                        ProductDetailsScreen(
+                                            product
+                                        )
+                                    }
                             }
                         }
-                    )
-                }
-                composable("productDetails/{id}") {
-                    it.arguments?.getString("id")?.let { id ->
-                        productDetailsVM.findById(id)
-                            .collectAsState(initial = null)
-                            .value?.let { product ->
-                                ProductDetailsScreen(
-                                    product
-                                )
-                            }
                     }
                 }
             }
@@ -93,7 +96,6 @@ private fun OrgsAppScreen(
     products: List<Product>,
     onItemClick: (product: Product) -> Unit = {}
 ) {
-    OrgsTheme {
         Scaffold(
             topBar = {
                 TopAppBar(title = { Text("Orgs") })
@@ -114,7 +116,6 @@ private fun OrgsAppScreen(
                     onItemClick(it)
                 }
             )
-        }
     }
 }
 

@@ -3,6 +3,7 @@ package br.com.alura.orgs.ui.composable.produto.detail
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -36,9 +37,11 @@ fun ProductDetailsScreen(product: Product) {
             64
         }
 
-        Box(Modifier
-            .wrapContentHeight()
-            .padding(bottom = (contentHeight / 2).dp)) {
+        Box(
+            Modifier
+                .wrapContentHeight()
+                .padding(bottom = (contentHeight / 2).dp)
+        ) {
             Image(
                 painter = rememberCoilPainter(
                     request = product.image ?: R.drawable.default_image,
@@ -62,6 +65,7 @@ fun ProductDetailsScreen(product: Product) {
                     .padding(start = 16.dp)
                     .height(contentHeight.dp),
                 elevation = 8.dp,
+                shape = RoundedCornerShape(28.dp)
             ) {
                 Text(
                     product.value.formatToCurrency(),
@@ -72,7 +76,8 @@ fun ProductDetailsScreen(product: Product) {
                 )
             }
         }
-        Text(product.name,
+        Text(
+            product.name,
             Modifier
                 .fillMaxWidth()
                 .padding(
@@ -82,15 +87,18 @@ fun ProductDetailsScreen(product: Product) {
                     top = 16.dp
                 ),
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold)
-        Text(product.description,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            product.description,
             Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
                 ),
-            fontSize = 16.sp)
+            fontSize = 16.sp
+        )
     }
 }
 
